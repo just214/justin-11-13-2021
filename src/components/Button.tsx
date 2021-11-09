@@ -16,7 +16,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         ref={ref}
-        className={`px-8 py-2 text-white rounded-md transition-colors ${classNamesMap[variant]} ${className}`}
+        className={`px-8 py-2 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${classNamesMap[variant]} ${className}`}
         {...restOfProps}>
         {props.children}
       </button>

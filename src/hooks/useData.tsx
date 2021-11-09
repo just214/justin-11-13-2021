@@ -1,21 +1,27 @@
 import * as React from "react";
 import { ProductId, AskOrBidItem } from "types";
-import { useThrottle } from "ahooks";
+import { calculateTotals } from "utils";
 
 export function useData(initialProductId: ProductId) {
+  /******* STATE  ********/
   const [asks, setAsks] = React.useState(null);
   const [bids, setBids] = React.useState(null);
   const [spread, setSpread] = React.useState(null);
+  // Passed to UI to determine depth graph percentages
   const [highestTotal, setHighestTotal] = React.useState(null);
-  const [delta, setDelta] = React.useState(null);
+  const [deltaData, setDeltaData] = React.useState(null);
+  // Used to handle client updates based on established web socket connection
   const [isConnectionClosed, setIsConnectionClosed] = React.useState(false);
   const [productId, setProductId] = React.useState<ProductId>(initialProductId);
+
+  /******* REFS  ********/
   // Keep the websocket in a ref to avoid re-renders
   const ws = React.useRef<WebSocket>(null);
   // Ref responsible for determining if the app has rendered.
   const rendered = React.useRef(false);
 
-  function toggleFeed(newProductId: ProductId) {
+  /******* FUNCTIONS  ********/
+  function switchFeed(newProductId: ProductId) {
     setProductId(newProductId);
   }
 
@@ -38,27 +44,27 @@ export function useData(initialProductId: ProductId) {
     let copyOfExistingAsksOrBids = isAsks ? asks : bids;
 
     // Loop over the delta asks (or bids)
-    askOrBidItems.forEach((item) => {
+    askOrBidItems.forEach((deltaItem) => {
       // Does this item match an existing item?
       const matchedExistingValue = copyOfExistingAsksOrBids.find(
-        (v) => v[0] === item[0]
+        (v) => v[0] === deltaItem[0]
       );
-      if (!matchedExistingValue) {
+      if (!matchedExistingValue && deltaItem[1] !== 0) {
         // There is no match, so add it on
-        copyOfExistingAsksOrBids = [...copyOfExistingAsksOrBids, item];
-      } else if (item[1] === 0) {
+        copyOfExistingAsksOrBids = [...copyOfExistingAsksOrBids, deltaItem];
+      } else if (deltaItem[1] === 0) {
         // There is a match with a size of 0, so remove it
-        copyOfExistingAsksOrBids.filter((v) => v[0] !== item[0]);
+        copyOfExistingAsksOrBids.filter((v) => v[0] !== deltaItem[0]);
       } else {
-        // There is a match (not 0), so map over and update the value. Probably not the best performance.
+        // There is a match with a size greater than 0, so replace it.
         const matchingIndex = copyOfExistingAsksOrBids.findIndex(
-          (v) => v[0] === item[0]
+          (v) => v[0] === deltaItem[0]
         );
-        copyOfExistingAsksOrBids[matchingIndex] = item;
+        copyOfExistingAsksOrBids[matchingIndex] = deltaItem;
       }
     });
 
-    return copyOfExistingAsksOrBids.filter((v) => v[1] !== 0);
+    return copyOfExistingAsksOrBids;
   }
 
   function startWebSocketConnection() {
@@ -88,27 +94,14 @@ export function useData(initialProductId: ProductId) {
         setAsks(calculateTotals(data.asks, "asks"));
         setBids(calculateTotals(data.bids, "bids"));
       } else {
-        // If there are no asks or bids, that means that we haven't gotten the snapshot yet
         if (!snapOccurred) return;
         // Subsequent delta messages
-        setDelta(data);
+        setDeltaData(data);
       }
     };
   }
 
-  React.useEffect(() => {
-    if (!delta) return;
-    function handleUpdates() {
-      const mergedAsks = mergeAskOrBidItems(delta.asks, "asks");
-      const mergedBids = mergeAskOrBidItems(delta.bids, "bids");
-      setAsks(calculateTotals(mergedAsks, "asks"));
-      setBids(calculateTotals(mergedBids, "bids"));
-    }
-
-    setTimeout(() => {
-      handleUpdates();
-    }, 500);
-  }, [delta]);
+  /******* EFFECTS  ********/
 
   // On initial mount, start the web socket connection
   React.useEffect(() => {
@@ -117,6 +110,22 @@ export function useData(initialProductId: ProductId) {
       ws.current.close();
     };
   }, []);
+
+  // This effect is responsible for handling the delta messages as they come in.
+  React.useEffect(() => {
+    if (!deltaData) return;
+
+    // Abstracted to function for possible refactor later. Web worker, promise perhaps?
+    function handleUpdates() {
+      if (!asks && !bids) return;
+      const mergedAsks = mergeAskOrBidItems(deltaData.asks, "asks");
+      const mergedBids = mergeAskOrBidItems(deltaData.bids, "bids");
+      setAsks(calculateTotals(mergedAsks, "asks"));
+      setBids(calculateTotals(mergedBids, "bids"));
+    }
+
+    handleUpdates();
+  }, [deltaData]);
 
   // Bids or asks changed. Time to recalculate spread and highest total.
   React.useEffect(() => {
@@ -154,7 +163,7 @@ export function useData(initialProductId: ProductId) {
     // Reset state
     setAsks(null);
     setBids(null);
-    setDelta(null);
+    setDeltaData(null);
     setSpread(null);
     setHighestTotal(null);
 
@@ -167,40 +176,17 @@ export function useData(initialProductId: ProductId) {
     );
   }, [productId]);
 
-  const throttledValues = useThrottle(
-    { asks, bids, spread, highestTotal },
-    { wait: 500 }
-  );
-
   return {
     // Data
-    ...throttledValues,
+    asks,
+    bids,
+    spread,
+    highestTotal,
     productId,
     isConnectionClosed,
     // Functions
-    toggleFeed,
+    switchFeed,
     closeConnection,
     openConnection,
   };
-}
-
-// Functions
-
-function sortByPrice(askOrBid: AskOrBidItem[], direction: "asc" | "desc") {
-  return askOrBid.sort((a, b) => {
-    return direction === "asc" ? (a[0] > b[0] ? -1 : 1) : a[0] > b[0] ? 1 : -1;
-  });
-}
-
-function calculateTotals(
-  askOrBid: AskOrBidItem[],
-  type: "asks" | "bids"
-): AskOrBidItem[] {
-  const isAsks = type === "asks";
-  let accumulatedTotal = 0;
-  return sortByPrice(askOrBid, isAsks ? "desc" : "asc").map((value) => {
-    const [price, size] = value;
-    accumulatedTotal += size;
-    return [price, size, accumulatedTotal];
-  });
 }
