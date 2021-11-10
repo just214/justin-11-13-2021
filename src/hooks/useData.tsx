@@ -19,6 +19,7 @@ export function useData(initialProductId: ProductId) {
   const ws = React.useRef<WebSocket>(null);
   // Ref responsible for determining if the app has rendered.
   const rendered = React.useRef(false);
+  const previousProductId = React.useRef(initialProductId);
 
   /******* FUNCTIONS  ********/
   function switchFeed(newProductId: ProductId) {
@@ -68,7 +69,7 @@ export function useData(initialProductId: ProductId) {
   }
 
   function startWebSocketConnection() {
-    ws.current = new WebSocket("wss://www.cryptofacilities.com/ws/v1");
+    ws.current = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
 
     ws.current.onopen = () => {
       ws.current.send(
@@ -130,6 +131,8 @@ export function useData(initialProductId: ProductId) {
   // Bids or asks changed. Time to recalculate spread and highest total.
   React.useEffect(() => {
     if (!bids || !asks) return;
+    // Remember, bids are sorted with the highest price on top.
+    // Asks are sorted with the lowest price at the top;
     const topBid = bids[0];
     const topAsk = asks[0];
     const bottomBid = bids[bids.length - 1];
@@ -156,7 +159,7 @@ export function useData(initialProductId: ProductId) {
       JSON.stringify({
         event: "unsubscribe",
         feed: "book_ui_1",
-        product_ids: [productId],
+        product_ids: [previousProductId.current],
       })
     );
 
@@ -174,6 +177,9 @@ export function useData(initialProductId: ProductId) {
         product_ids: [productId],
       })
     );
+
+    // Keep track of the previous productId so we can unsubscribe when the product Id changes.
+    previousProductId.current = productId;
   }, [productId]);
 
   return {
