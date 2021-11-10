@@ -12,7 +12,7 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
   const isBuySide = props.variant === "bid";
 
   return (
-    <div className="text-white w-full md:w-1/2 overflow-hidden h-[40vh] md:h-[80vh]">
+    <div className="text-white w-full md:w-1/2">
       <div
         className={`md:flex justify-between text2 px-12 ${
           isBuySide ? "hidden flex-row-reverse" : "flex flex-row"
@@ -22,7 +22,7 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
         <p className="w-24 text-right">TOTAL</p>
       </div>
 
-      {props.items?.map((item) => {
+      {props.items?.slice(0, 15).map((item) => {
         const [price, size, total] = item;
         const depthGraphPercentage = (total / props.highestTotal) * 100;
         return (
