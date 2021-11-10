@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useThrottle, useThrottleFn } from "ahooks";
+import { useThrottle } from "ahooks";
+import { ErrorBoundary } from "react-error-boundary";
 
 // Hooks
 import { useData } from "hooks/useData";
@@ -52,34 +53,42 @@ const App = () => {
 
   // Render Component
   return (
-    <Layout spread={throttledData.spread}>
+    <Layout productId={productId} spread={throttledData.spread}>
       <SEO title="Order Book" description="An order book demo." />
       <Show when={isConnectionClosed}>
         <ConnectionAlert onRequestRestoreConnection={restoreConnection} />
       </Show>
 
-      <Box as="span" className="flex flex-col-reverse md:flex-row flex-wrap">
-        <OrderBookSide
-          variant="bid"
-          items={throttledData.bids}
-          highestTotal={throttledData.highestTotal}
-        />
-        <p className="text2 text-center my-2 block md:hidden">
-          Spread {throttledData.spread}
-        </p>
-        <OrderBookSide
-          variant="ask"
-          items={throttledData.asks}
-          highestTotal={throttledData.highestTotal}
-        />
-      </Box>
+      <ErrorBoundary
+        FallbackComponent={ErrorFallback}
+        onReset={() => {
+          // reset the state of your app so the error doesn't happen again
+        }}>
+        <Box
+          as="span"
+          className="flex flex-col-reverse md:flex-row flex-wrap min-h-[450px]">
+          <OrderBookSide
+            variant="bid"
+            items={throttledData.bids}
+            highestTotal={throttledData.highestTotal}
+          />
+          <p className="text2 text-center my-2 block md:hidden">
+            Spread {throttledData.spread}
+          </p>
+          <OrderBookSide
+            variant="ask"
+            items={throttledData.asks}
+            highestTotal={throttledData.highestTotal}
+          />
+        </Box>
+      </ErrorBoundary>
 
       <Box className="text-center mt-4">
         <Button
           onClick={handleToggleFeed}
           variant="primary"
           disabled={isConnectionClosed}>
-          Toggle Feed ({productId})
+          Toggle Feed
         </Button>
       </Box>
     </Layout>
@@ -87,3 +96,14 @@ const App = () => {
 };
 
 export default App;
+
+// Fallback for error boundary
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div role="alert">
+      <p>Something went wrong:</p>
+      <pre>{error.message}</pre>
+      <button onClick={resetErrorBoundary}>Try again</button>
+    </div>
+  );
+}
