@@ -1,6 +1,6 @@
 export type LayoutProps = {
   spread: string;
-  productId: string;
+  pair: string;
   children?: React.ReactNode;
 };
 
@@ -11,7 +11,7 @@ export const Layout = (props: LayoutProps) => {
       <header
         className={`flex justify-center items-center relative ${headerFooterClassNames}`}>
         <h1 id="orderbook" className="absolute left-4">
-          Order Book ({props.productId})
+          Order Book ({props.pair})
         </h1>
 
         <p className="text2 hidden md:block">Spread {props.spread}</p>

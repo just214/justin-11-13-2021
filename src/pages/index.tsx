@@ -89,13 +89,19 @@ const App = () => {
   }
 
   function handleToggleFeed() {
-    switchFeed(productId === "PI_XBTUSD" ? "PI_ETHUSD" : "PI_XBTUSD");
+    const newProductId = productId === "PI_XBTUSD" ? "PI_ETHUSD" : "PI_XBTUSD";
+    switchFeed(newProductId);
   }
+
+  const pair = productId === "PI_XBTUSD" ? "BTC/USD" : "ETH/USD";
 
   // Render Component
   return (
-    <Layout productId={productId} spread={throttledData?.spread}>
-      <SEO title="Order Book" description="An order book demo." />
+    <Layout spread={throttledData?.spread} pair={pair}>
+      <SEO
+        title={`Order Book ${pair}`}
+        description="An order book demo app for BTC/USD and ETH/USD."
+      />
       <Show when={isConnectionClosed}>
         <ConnectionAlert onRequestRestoreConnection={restoreConnection} />
       </Show>
