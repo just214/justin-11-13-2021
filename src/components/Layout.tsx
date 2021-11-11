@@ -17,7 +17,7 @@ export const Layout = (props: LayoutProps) => {
         <p className="text2 hidden md:block">Spread {props.spread}</p>
       </header>
       <main className="flex-1">
-        <div className="container mx-auto p-4">{props.children}</div>
+        <div className="p-4">{props.children}</div>
       </main>
     </div>
   );
