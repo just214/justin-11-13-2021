@@ -2,6 +2,7 @@ import * as React from "react";
 import { FormattedAskOrBidItem } from "types";
 import { formatNumber } from "utils";
 import { useWindowSize } from "@reach/window-size";
+import { SkeletonLoader } from "components/SkeletonLoader";
 
 export type OrderBookSideProps = {
   variant: "bid" | "ask";
@@ -28,6 +29,9 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
         <p className="w-24 text-right">SIZE</p>
         <p className="w-24 text-right">TOTAL</p>
       </div>
+      {!props.items && (
+        <SkeletonLoader variant={props.variant} rows={itemsToDisplay} />
+      )}
 
       {props.items?.slice(0, itemsToDisplay).map((item) => {
         const [price, size, total] = item;
