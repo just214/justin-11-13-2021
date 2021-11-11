@@ -1,6 +1,7 @@
 import * as React from "react";
 import { FormattedAskOrBidItem } from "types";
 import { formatNumber } from "utils";
+import { useWindowSize } from "@reach/window-size";
 
 export type OrderBookSideProps = {
   variant: "bid" | "ask";
@@ -10,6 +11,12 @@ export type OrderBookSideProps = {
 
 export const OrderBookSide = (props: OrderBookSideProps) => {
   const isBuySide = props.variant === "bid";
+  const { height, width } = useWindowSize();
+
+  // If mobile display, just show 15 items from each side.
+  // Otherwise, calculate the amount of items based on the height of the window.
+  // (Each row is approximately 24px high)
+  const itemsToDisplay = width < 768 ? 15 : Math.floor(height / 30);
 
   return (
     <div className="text-white w-full md:w-1/2">
@@ -22,7 +29,7 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
         <p className="w-24 text-right">TOTAL</p>
       </div>
 
-      {props.items?.slice(0, 15).map((item) => {
+      {props.items?.slice(0, itemsToDisplay).map((item) => {
         const [price, size, total] = item;
         const depthGraphPercentage = (total / props.highestTotal) * 100;
         return (

@@ -82,7 +82,8 @@ export function useData(initialProductId: ProductId) {
     };
     ws.current.onclose = () => console.log("ws closed");
 
-    ws.current.onerror = (e) => console.log("error", e);
+    ws.current.onerror = (e) =>
+      console.log("Oh no...something went terribly wrong!", e);
 
     let snapOccurred = false;
 
