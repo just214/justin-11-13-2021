@@ -11,12 +11,15 @@
   "dependencies": {
     "@koale/useworker": "^4.0.2",
     "@radix-ui/react-polymorphic": "^0.0.14",
+    "@reach/window-size": "^0.16.0",
+    "add": "^2.0.6",
     "ahooks": "^2.10.12",
     "next": "12.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-error-boundary": "^3.1.4",
-    "react-icons": "^4.3.1"
+    "react-icons": "^4.3.1",
+    "yarn": "^1.22.17"
   },
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",
