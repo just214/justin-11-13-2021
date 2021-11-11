@@ -1,8 +1,3 @@
-# justin-11-10-2021
+# justin-11-12-2021
 
-You know what this is :)
-
-TODOS:
-
-- Tests
-- Browser support
+You know what this is 🙃
