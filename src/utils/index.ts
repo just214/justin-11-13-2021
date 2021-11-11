@@ -13,7 +13,7 @@ export function sortByPrice(
   direction: "asc" | "desc"
 ) {
   return askOrBid.sort((a, b) => {
-    return direction === "asc" ? (a[0] > b[0] ? -1 : 1) : a[0] > b[0] ? 1 : -1;
+    return direction === "desc" ? (a[0] > b[0] ? -1 : 1) : a[0] > b[0] ? 1 : -1;
   });
 }
 
@@ -23,7 +23,7 @@ export function calculateTotals(
 ): AskOrBidItem[] {
   const isAsks = type === "asks";
   let accumulatedTotal = 0;
-  return sortByPrice(askOrBid, isAsks ? "desc" : "asc").map((value) => {
+  return sortByPrice(askOrBid, isAsks ? "asc" : "desc").map((value) => {
     const [price, size] = value;
     accumulatedTotal += size;
     return [price, size, accumulatedTotal];
