@@ -1,5 +1,5 @@
 import * as React from "react";
-import { FormattedAskOrBidItem } from "types";
+import { AskOrBidItem } from "types";
 import { formatNumber } from "utils";
 import { SkeletonLoader } from "components/SkeletonLoader";
 
@@ -7,7 +7,7 @@ export type OrderBookSideProps = {
   // Determines how to render the items (orientation)
   variant: "bid" | "ask";
   // The actual bid or ask items to display
-  items?: FormattedAskOrBidItem[];
+  items?: AskOrBidItem[];
   // Used to calculate the depth graph percentages
   highestTotal: number;
   // Used to determine the number of loading skeleton rows

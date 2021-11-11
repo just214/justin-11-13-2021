@@ -1,9 +1,4 @@
 export type AskOrBidItem = [price: number, size: number, total?: number];
-export type FormattedAskOrBidItem = [
-  price: number,
-  size: number,
-  total: number
-];
 
 export interface OrderBookFeed {
   feed: string;
