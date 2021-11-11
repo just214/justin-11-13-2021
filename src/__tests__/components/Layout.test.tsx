@@ -20,7 +20,7 @@ describe("Layout", () => {
         class="absolute left-4"
         id="orderbook"
       >
-        Order Book (PT_ETHUSD)
+        Order Book ()
       </h1>
       <p
         class="text2 hidden md:block"
@@ -32,7 +32,7 @@ describe("Layout", () => {
       class="flex-1"
     >
       <div
-        class="container mx-auto p-4"
+        class="p-4"
       >
         My App
       </div>
