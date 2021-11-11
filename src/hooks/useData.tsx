@@ -6,9 +6,6 @@ export function useData(initialProductId: ProductId) {
   /******* STATE  ********/
   const [asks, setAsks] = React.useState(null);
   const [bids, setBids] = React.useState(null);
-  const [spread, setSpread] = React.useState(null);
-  // Passed to UI to determine depth graph percentages
-  const [highestTotal, setHighestTotal] = React.useState(null);
   const [deltaData, setDeltaData] = React.useState(null);
   // Used to handle client updates based on established web socket connection
   const [isConnectionClosed, setIsConnectionClosed] = React.useState(false);
@@ -129,25 +126,6 @@ export function useData(initialProductId: ProductId) {
     handleUpdates();
   }, [deltaData]);
 
-  // Bids or asks changed. Time to recalculate spread and highest total.
-  React.useEffect(() => {
-    if (!bids || !asks) return;
-    // Remember, bids are sorted with the highest price on top.
-    // Asks are sorted with the lowest price at the top;
-    const topBid = bids[0];
-    const topAsk = asks[0];
-    const bottomBid = bids[bids.length - 1];
-    const bottomAsk = asks[asks.length - 1];
-    const topBidPrice = topBid[0];
-    const topAskPrice = topAsk[0];
-    const topBidTotal = bottomBid[2];
-    const topAskTotal = bottomAsk[2];
-    const spread = (topAskPrice - topBidPrice).toFixed(1);
-    const highestTotal = Math.max(topBidTotal, topAskTotal);
-    setSpread(spread);
-    setHighestTotal(highestTotal);
-  }, [bids, asks]);
-
   // This effect is responsible for unsubscribing from previous product ID and
   // subscribing to new product ID any time it changes. (e.g. "PI_XBTUSD" => "PI_ETHUSD")
   React.useEffect(() => {
@@ -168,8 +146,6 @@ export function useData(initialProductId: ProductId) {
     setAsks(null);
     setBids(null);
     setDeltaData(null);
-    setSpread(null);
-    setHighestTotal(null);
 
     ws.current.send(
       JSON.stringify({
@@ -187,8 +163,6 @@ export function useData(initialProductId: ProductId) {
     // Data
     asks,
     bids,
-    spread,
-    highestTotal,
     productId,
     isConnectionClosed,
     // Functions

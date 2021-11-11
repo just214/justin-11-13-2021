@@ -1,23 +1,21 @@
 import * as React from "react";
 import { FormattedAskOrBidItem } from "types";
 import { formatNumber } from "utils";
-import { useWindowSize } from "@reach/window-size";
 import { SkeletonLoader } from "components/SkeletonLoader";
 
 export type OrderBookSideProps = {
+  // Determines how to render the items (orientation)
   variant: "bid" | "ask";
+  // The actual bid or ask items to display
   items?: FormattedAskOrBidItem[];
+  // Used to calculate the depth graph percentages
   highestTotal: number;
+  // Used to determine the number of loading skeleton rows
+  expectedItemsCount: number;
 };
 
 export const OrderBookSide = (props: OrderBookSideProps) => {
   const isBuySide = props.variant === "bid";
-  const { height, width } = useWindowSize();
-
-  // If mobile display, just show 15 items from each side.
-  // Otherwise, calculate the amount of items based on the height of the window.
-  // (Each row is approximately 24px high)
-  const itemsToDisplay = width < 768 ? 15 : Math.floor(height / 30);
 
   return (
     <div className="text-white w-full md:w-1/2">
@@ -30,14 +28,17 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
         <p className="w-24 text-right">TOTAL</p>
       </div>
       {!props.items && (
-        <SkeletonLoader variant={props.variant} rows={itemsToDisplay} />
+        <SkeletonLoader
+          variant={props.variant}
+          rows={props.expectedItemsCount}
+        />
       )}
 
-      {props.items?.slice(0, itemsToDisplay).map((item) => {
+      {props.items?.map((item) => {
         const [price, size, total] = item;
         const depthGraphPercentage = (total / props.highestTotal) * 100;
         return (
-          <div className="relative" key={item[0]}>
+          <div className="relative font-mono" key={item[0]}>
             <div
               className={`absolute opacity-[15%] bg-green-500 h-full flex ${
                 isBuySide ? "bg-green-500 -right-100 md:right-0" : "bg-red-500"
