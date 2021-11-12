@@ -32,10 +32,10 @@ const App = () => {
   const { height, width } = useWindowSize();
   const [throttledData, setThrottledData] = React.useState(null);
 
-  // If mobile display, just show 12 items from each side.
-  // Otherwise, calculate the amount of items based on the height of the window.
+  // Calculate the amount of items based on the height of the window.
   // (Each row is approximately 24px high)
-  const itemsToDisplay = width < 768 ? 12 : Math.floor(height / 30);
+  const itemsToDisplay =
+    width < 768 ? Math.floor(height / 60) : Math.floor(height / 30);
 
   /* 
   This function is used for the following:
@@ -113,7 +113,7 @@ const App = () => {
         }}>
         <Box
           as="div"
-          className="flex flex-col-reverse md:flex-row flex-wrap min-h-[450px] w-full">
+          className="flex flex-col-reverse md:flex-row flex-wrap w-full min-h-[80vh]">
           <OrderBookSide
             variant="bid"
             expectedItemsCount={itemsToDisplay}
