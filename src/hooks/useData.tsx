@@ -134,6 +134,7 @@ export function useData(initialProductId: ProductId) {
       rendered.current = true;
       return;
     }
+    if (ws.current.readyState !== 1) return;
     ws.current.send(
       JSON.stringify({
         event: "unsubscribe",
