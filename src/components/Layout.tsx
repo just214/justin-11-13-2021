@@ -9,7 +9,8 @@ export const Layout = (props: LayoutProps) => {
   return (
     <div className="flex flex-col min-h-screen">
       <header
-        className={`flex justify-center items-center relative ${headerFooterClassNames}`}>
+        className={`flex justify-center items-center relative ${headerFooterClassNames}`}
+      >
         <h1 id="orderbook" className="absolute left-4">
           Order Book ({props.pair})
         </h1>

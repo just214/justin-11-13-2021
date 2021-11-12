@@ -8,3 +8,6 @@ export const Box = React.forwardRef(
     <Comp {...props} ref={forwardedRef} />
   )
 ) as PolymorphicBox;
+
+// eslint-disable-next-line functional/immutable-data
+Box.displayName = "Box";

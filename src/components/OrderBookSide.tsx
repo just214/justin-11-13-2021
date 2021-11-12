@@ -22,7 +22,8 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
       <div
         className={`md:flex justify-between text2 px-12 ${
           isBuySide ? "hidden flex-row-reverse" : "flex flex-row"
-        }`}>
+        }`}
+      >
         <h2 data-testid="price" className="w-24 text-right">
           PRICE
         </h2>
@@ -51,11 +52,13 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
             <div
               className={`flex justify-between text1 px-12 ${
                 isBuySide ? "flex-row md:flex-row-reverse" : "flex-row"
-              }`}>
+              }`}
+            >
               <p
                 className={`w-24 text-right ${
                   isBuySide ? "text-green-500" : "text-red-500"
-                }`}>
+                }`}
+              >
                 {formatNumber(price, 2)}
               </p>
 

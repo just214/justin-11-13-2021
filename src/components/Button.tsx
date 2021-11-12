@@ -17,9 +17,13 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         ref={ref}
         className={`px-8 py-2 text-white rounded-md transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${classNamesMap[variant]} ${className}`}
-        {...restOfProps}>
+        {...restOfProps}
+      >
         {props.children}
       </button>
     );
   }
 );
+
+// eslint-disable-next-line functional/immutable-data
+Button.displayName = "Button";

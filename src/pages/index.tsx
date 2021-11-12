@@ -76,14 +76,14 @@ const App = () => {
 
   React.useEffect(() => {
     handleThrottleAndSlicing.run();
-  }, [asks, bids, itemsToDisplay]);
+  }, [asks, bids, itemsToDisplay, handleThrottleAndSlicing]);
 
   // Effects
   React.useEffect(() => {
     if (!isVisible) {
       closeConnection();
     }
-  }, [isVisible]);
+  }, [isVisible, closeConnection]);
 
   // Functions
   function restoreConnection() {
@@ -119,10 +119,12 @@ const App = () => {
         FallbackComponent={ErrorFallback}
         onReset={() => {
           // reset the state of your app so the error doesn't happen again
-        }}>
+        }}
+      >
         <Box
           as="div"
-          className="flex flex-col-reverse md:flex-row flex-wrap w-full min-h-[80vh]">
+          className="flex flex-col-reverse md:flex-row flex-wrap w-full min-h-[80vh]"
+        >
           <OrderBookSide
             variant="bid"
             expectedItemsCount={itemsToDisplay}
@@ -145,7 +147,8 @@ const App = () => {
         <Button
           onClick={handleToggleFeed}
           variant="primary"
-          disabled={isConnectionClosed}>
+          disabled={isConnectionClosed}
+        >
           Toggle Feed
         </Button>
       </Box>

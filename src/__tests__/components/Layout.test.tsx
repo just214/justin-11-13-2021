@@ -4,7 +4,7 @@ import { Layout } from "components/Layout";
 describe("Layout", () => {
   it("should match snapshot", () => {
     const { asFragment } = render(
-      <Layout spread="123" productId="PT_ETHUSD">
+      <Layout spread="123" pair="ETH/USD">
         My App
       </Layout>
     );
