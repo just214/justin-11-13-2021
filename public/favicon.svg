@@ -1,15 +1,27 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 30" x="0px" y="0px">
-  <style>
-    .favicon {
-      fill: #333;
-    }
-
-    @media (prefers-color-scheme: dark) {
-      .favicon {
-        fill: yellow;
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #aa1926;
       }
-    }
-  </style>
-  <path class="favicon"
-    d="M23.94,9.19a1.27,1.27,0,0,0-1.1-.88l-6.93-.63L13.17,1.27a1.28,1.28,0,0,0-2.35,0L8.09,7.69l-6.93.63a1.28,1.28,0,0,0-.72,2.23l5.24,4.59-1.54,6.8A1.28,1.28,0,0,0,6,23.32l6-3.57,6,3.57a1.28,1.28,0,0,0,1.9-1.38l-1.54-6.8,5.24-4.59A1.28,1.28,0,0,0,23.94,9.19ZM12.12,19.68h0Z" />
+
+      .cls-2 {
+        fill: #39b54a;
+      }
+    </style>
+  </defs>
+  <rect class="cls-1" x="774.53" y="746.43" width="425.47" height="146.43" />
+  <rect class="cls-1" x="827.26" y="892.86" width="372.74" height="146.43" />
+  <rect class="cls-1" x="701.48" y="526.79" width="498.52" height="219.64" />
+  <rect class="cls-1" x="600" y="307.14" width="600" height="219.64" />
+  <rect class="cls-1" x="373.23" y="160.71" width="826.77" height="146.43" />
+  <rect class="cls-1" x="241.18" width="958.82" height="160.71" />
+  <rect class="cls-1" x="880.21" y="1039.29" width="319.79" height="160.71" />
+  <rect class="cls-2" y="746.43" width="774.53" height="146.43" />
+  <rect class="cls-2" y="892.86" width="827.26" height="146.43" />
+  <rect class="cls-2" y="1039.29" width="880.21" height="160.71" />
+  <rect class="cls-2" y="526.79" width="701.48" height="219.64" />
+  <rect class="cls-2" width="241.18" height="160.71" />
+  <rect class="cls-2" y="160.71" width="373.23" height="146.43" />
+  <rect class="cls-2" y="307.14" width="600" height="219.64" />
 </svg>

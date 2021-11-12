@@ -1,6 +1,6 @@
 {
-  "name": "Next.js Starter",
-  "short_name": "Next Starter",
+  "name": "Order Book Demo",
+  "short_name": "Order Book",
   "icons": [
     {
       "src": "/apple-touch-icon-144x144.png",
