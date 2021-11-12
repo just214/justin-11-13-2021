@@ -1,13 +1,26 @@
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { OrderBookSide } from "components/OrderBookSide";
 import { AskOrBidItem } from "types";
 
 const sampleAskItems: AskOrBidItem[] = [
-  [1, 4000, 1],
-  [1, 4200, 2],
+  // price, size, total
+  [4000, 1, 1],
+  [4200, 1, 2],
 ];
 
 describe("OrderBookSide", () => {
+  it("should render the correct data", () => {
+    render(
+      <OrderBookSide
+        variant="ask"
+        expectedItemsCount={12}
+        highestTotal={1200}
+        items={sampleAskItems}
+      />
+    );
+
+    expect(screen.getByTestId("price")).toHaveTextContent("PRICE");
+  });
   it("should match snapshot", () => {
     const { asFragment } = render(
       <OrderBookSide
@@ -25,21 +38,22 @@ describe("OrderBookSide", () => {
     <div
       class="md:flex justify-between text2 px-12 flex flex-row"
     >
-      <p
+      <h2
         class="w-24 text-right"
+        data-testid="price"
       >
         PRICE
-      </p>
-      <p
+      </h2>
+      <h2
         class="w-24 text-right"
       >
         SIZE
-      </p>
-      <p
+      </h2>
+      <h2
         class="w-24 text-right"
       >
         TOTAL
-      </p>
+      </h2>
     </div>
     <div
       class="relative font-mono"
@@ -54,12 +68,12 @@ describe("OrderBookSide", () => {
         <p
           class="w-24 text-right text-red-500"
         >
-          1.00
+          4,000.00
         </p>
         <p
           class="w-24 text-right"
         >
-          4,000
+          1
         </p>
         <p
           class="w-24 text-right"
@@ -81,12 +95,12 @@ describe("OrderBookSide", () => {
         <p
           class="w-24 text-right text-red-500"
         >
-          1.00
+          4,200.00
         </p>
         <p
           class="w-24 text-right"
         >
-          4,200
+          1
         </p>
         <p
           class="w-24 text-right"
