@@ -15,6 +15,7 @@ import { OrderBookSide } from "components/OrderBookSide";
 import { ConnectionAlert } from "components/ConnectionAlert";
 import { Show } from "components/Show";
 import { Button } from "components/Button";
+import { ErrorAlert } from "components/ErrorAlert";
 
 const App = () => {
   // Custom Hooks
@@ -24,6 +25,7 @@ const App = () => {
     switchFeed,
     productId,
     isConnectionClosed,
+    error,
     closeConnection,
     openConnection,
   } = useData("PI_XBTUSD");
@@ -104,6 +106,10 @@ const App = () => {
       />
       <Show when={isConnectionClosed}>
         <ConnectionAlert onRequestRestoreConnection={restoreConnection} />
+      </Show>
+
+      <Show when={error !== null}>
+        <ErrorAlert />
       </Show>
 
       <ErrorBoundary

@@ -23,9 +23,11 @@ export const OrderBookSide = (props: OrderBookSideProps) => {
         className={`md:flex justify-between text2 px-12 ${
           isBuySide ? "hidden flex-row-reverse" : "flex flex-row"
         }`}>
-        <p className="w-24 text-right">PRICE</p>
-        <p className="w-24 text-right">SIZE</p>
-        <p className="w-24 text-right">TOTAL</p>
+        <h2 data-testid="price" className="w-24 text-right">
+          PRICE
+        </h2>
+        <h2 className="w-24 text-right">SIZE</h2>
+        <h2 className="w-24 text-right">TOTAL</h2>
       </div>
       {!props.items && (
         <SkeletonLoader

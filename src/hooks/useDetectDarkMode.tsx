@@ -7,6 +7,7 @@ export function useDetectDarkMode() {
     setIsDarkMode(e.matches);
   }
   React.useEffect(() => {
+    if (!window && !window.matchMedia) return;
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", handleUpdateState);

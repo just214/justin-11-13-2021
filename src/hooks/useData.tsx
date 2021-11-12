@@ -9,6 +9,7 @@ export function useData(initialProductId: ProductId) {
   const [deltaData, setDeltaData] = React.useState(null);
   // Used to handle client updates based on established web socket connection
   const [isConnectionClosed, setIsConnectionClosed] = React.useState(false);
+  const [error, setError] = React.useState(null);
   const [productId, setProductId] = React.useState<ProductId>(initialProductId);
 
   /******* REFS  ********/
@@ -69,6 +70,8 @@ export function useData(initialProductId: ProductId) {
     ws.current = new WebSocket(process.env.NEXT_PUBLIC_WEBSOCKET_URL);
 
     ws.current.onopen = () => {
+      // Connection established. Reset any past errors.
+      setError(null);
       ws.current.send(
         JSON.stringify({
           event: "subscribe",
@@ -79,8 +82,9 @@ export function useData(initialProductId: ProductId) {
     };
     ws.current.onclose = () => console.log("ws closed");
 
-    ws.current.onerror = (e) =>
-      console.log("Oh no...something went terribly wrong!", e);
+    ws.current.onerror = (e) => {
+      setError(e);
+    };
 
     let snapOccurred = false;
 
@@ -166,6 +170,7 @@ export function useData(initialProductId: ProductId) {
     bids,
     productId,
     isConnectionClosed,
+    error,
     // Functions
     switchFeed,
     closeConnection,
