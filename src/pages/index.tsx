@@ -41,7 +41,7 @@ const App = () => {
 
   /* 
   This function is used for the following:
-  1. Slice the asks/bids based on the window size
+  1. Slice the asks/bids dynamically based on the window size
   2. Calculate the spread and highest total (for depth graph) based on the 
     actual number of bid/asks items to display. (not sure if this is right, but my best guess 🤷🏻‍♂️)
   3. Throttle all of the values by 500ms to get some smooth UI rendering.
@@ -102,7 +102,9 @@ const App = () => {
     <Layout spread={throttledData?.spread} pair={pair}>
       <SEO
         title={`Order Book ${pair}`}
-        description="An order book demo app for BTC/USD and ETH/USD."
+        description="An order book demo for BTC/USD and ETH/USD pairings."
+        url="https://justin-11-10-2021.vercel.app/"
+        icon="apple-touch-icon.png"
       />
       <Show when={isConnectionClosed}>
         <ConnectionAlert onRequestRestoreConnection={restoreConnection} />
