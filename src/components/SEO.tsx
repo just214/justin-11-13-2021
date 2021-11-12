@@ -5,12 +5,15 @@ type SEOProps = {
   description: string;
   url?: string;
   icon?: string;
+  pair?: string;
 };
 
 export const SEO = (props: SEOProps) => {
   return (
     <Head>
-      <title>{props.title}</title>
+      <title>
+        {props.title} ({props.pair})
+      </title>
       <meta name="title" content={props.title} />
       <meta name="description" content={props.description} />
 

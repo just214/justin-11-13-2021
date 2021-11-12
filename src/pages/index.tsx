@@ -101,7 +101,8 @@ const App = () => {
   return (
     <Layout spread={throttledData?.spread} pair={pair}>
       <SEO
-        title={`Order Book ${pair}`}
+        title={`Order Book`}
+        pair={pair}
         description="An order book demo for BTC/USD and ETH/USD pairings."
         url="https://justin-11-10-2021.vercel.app/"
         icon="apple-touch-icon.png"
