@@ -37,7 +37,7 @@ const App = () => {
   // Calculate the amount of items based on the height of the window.
   // (Each row is approximately 24px high)
   const itemsToDisplay =
-    width < 768 ? Math.floor(height / 60) : Math.floor(height / 30);
+    width < 768 ? Math.floor(height / 65) : Math.floor(height / 30);
 
   /* 
   This function is used for the following:
@@ -119,12 +119,10 @@ const App = () => {
         FallbackComponent={ErrorFallback}
         onReset={() => {
           // reset the state of your app so the error doesn't happen again
-        }}
-      >
+        }}>
         <Box
           as="div"
-          className="flex flex-col-reverse md:flex-row flex-wrap w-full min-h-[80vh]"
-        >
+          className="flex flex-col-reverse md:flex-row flex-wrap w-full min-h-[80vh]">
           <OrderBookSide
             variant="bid"
             expectedItemsCount={itemsToDisplay}
@@ -147,8 +145,7 @@ const App = () => {
         <Button
           onClick={handleToggleFeed}
           variant="primary"
-          disabled={isConnectionClosed}
-        >
+          disabled={isConnectionClosed}>
           Toggle Feed
         </Button>
       </Box>
